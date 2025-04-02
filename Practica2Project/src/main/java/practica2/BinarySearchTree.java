@@ -1,3 +1,5 @@
+//Yael Martín Benzaquen y Paula Ríos Sánchez
+
 package practica2;
 
 import java.util.ArrayList;
@@ -92,7 +94,7 @@ public class BinarySearchTree<T> implements BinarySearchTreeStructure<T> {
         int cmp = comparator.compare(value, this.value);
         if (cmp < 0 && left != null) {
             if (comparator.compare(value, left.value) == 0) {
-                left = null;  // Elimina la rama completa
+                left = null;
             } else {
                 left.removeBranch(value);
             }
@@ -135,14 +137,14 @@ public class BinarySearchTree<T> implements BinarySearchTreeStructure<T> {
         if (compare == 0) {
             if (left != null && right != null) {
                 this.value = right.minimum();
-                right.removeValue(this.value);  // Cambiado de removeBranch a removeValue
+                right.removeValue(this.value);
             } else if (left != null) {
                 this.value = left.value;
-                right = left.right;  // Antes faltaba esta línea
+                right = left.right;
                 left = left.left;
             } else if (right != null) {
                 this.value = right.value;
-                left = right.left;   // Antes faltaba esta línea
+                left = right.left;
                 right = right.right;
             } else {
                 this.value = null;
@@ -178,19 +180,15 @@ public class BinarySearchTree<T> implements BinarySearchTreeStructure<T> {
         this.right = null;
        
         balanceInsert(elements, 0, elements.size() - 1);
-
-
     }
 
     private void balanceInsert(List<T> elements, int start, int end) {
         if (start > end){
             return; 
         } 
-
         int mid = (start + end) / 2;
         this.insert(elements.get(mid));
         balanceInsert(elements, start, mid - 1);
         balanceInsert(elements, mid + 1, end);
-    }
-    
+    }   
 }

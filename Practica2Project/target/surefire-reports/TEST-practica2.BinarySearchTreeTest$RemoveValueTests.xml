@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="practica2.BinarySearchTreeTest$SizeAndDepthTests" time="0.015" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="practica2.BinarySearchTreeTest$RemoveValueTests" time="0.041" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -58,6 +58,9 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="depthWithLeftAndRightChildren" classname="practica2.BinarySearchTreeTest$SizeAndDepthTests" time="0.003"/>
-  <testcase name="shouldCountNodes" classname="practica2.BinarySearchTreeTest$SizeAndDepthTests" time="0.005"/>
+  <testcase name="shouldDoNothingIfValueNotExists" classname="practica2.BinarySearchTreeTest$RemoveValueTests" time="0.004"/>
+  <testcase name="shouldRemoveLeafNode" classname="practica2.BinarySearchTreeTest$RemoveValueTests" time="0.005"/>
+  <testcase name="shouldNotThrowOnEmptyTree" classname="practica2.BinarySearchTreeTest$RemoveValueTests" time="0.008"/>
+  <testcase name="shouldRemoveNodeWithRightChild" classname="practica2.BinarySearchTreeTest$RemoveValueTests" time="0.003"/>
+  <testcase name="shouldRemoveNodeWithTwoChildren" classname="practica2.BinarySearchTreeTest$RemoveValueTests" time="0.004"/>
 </testsuite>

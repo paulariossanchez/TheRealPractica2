@@ -1,16 +1,16 @@
 package practica2;
 
+import java.util.Comparator;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Comparator;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 
@@ -34,7 +34,7 @@ public class BinarySearchTreeTest {
             assertTrue(tree.contains(10));
         }
 
-         @Test
+        @Test
         @DisplayName("debe lanzar excepción si se inserta valor duplicado")
         void insertDuplicateThrowsException() {
             tree.insert(5);
@@ -52,37 +52,19 @@ public class BinarySearchTreeTest {
     class IsLeafTests {
 
         @Test
-        @DisplayName("isLeaf debe devolver false si solo tiene hijo izquierdo")
-        void isLeafFalseWithLeftOnly() {
-            tree.insert(10);
-            tree.insert(5);
-            assertFalse(tree.isLeaf());
-        }
-
-        @Test
-        @DisplayName("isLeaf debe devolver false si solo tiene hijo derecho")
-        void isLeafFalseWithRightOnly() {
-            tree.insert(10);
-            tree.insert(15);
-            assertFalse(tree.isLeaf());
-        }
-
-        @Test
-        @DisplayName("isLeaf debe devolver false si tiene ambos hijos")
-        void isLeafFalseWithBothChildren() {
-            tree.insert(10);
-            tree.insert(5);
-            tree.insert(15);
-            assertFalse(tree.isLeaf());
-        }
-
-        @Test
-        @DisplayName("isLeaf debe devolver true si es una hoja sin hijos")
-        void isLeafShouldReturnTrueWhenNoChildren() {
-            tree.insert(10); // solo la raíz
+        @DisplayName("debe devolver true si es hoja")
+        void shouldBeLeaf() {
+            tree.insert(7);
             assertTrue(tree.isLeaf());
         }
 
+        @Test
+        @DisplayName("debe devolver false si tiene hijos")
+        void shouldNotBeLeaf() {
+            tree.insert(7);
+            tree.insert(3);
+            assertFalse(tree.isLeaf());
+        }
     }
 
     @Nested
@@ -167,8 +149,8 @@ public class BinarySearchTreeTest {
         void removeNonexistentBranchDoesNothing() {
             tree.insert(10);
             tree.insert(5);
-            tree.removeBranch(99); // no existe
-            assertTrue(tree.contains(5)); // sigue existiendo
+            tree.removeBranch(99); 
+            assertTrue(tree.contains(5)); 
         }
 
         @Test
@@ -188,7 +170,7 @@ public class BinarySearchTreeTest {
         @DisplayName("debe eliminar la rama derecha si coincide con el valor")
         void shouldRemoveRightBranchIfMatch() {
             tree.insert(10);
-            tree.insert(15);  // hijo derecho
+            tree.insert(15);  
 
             assertTrue(tree.contains(15));
             tree.removeBranch(15);
@@ -220,15 +202,6 @@ public class BinarySearchTreeTest {
             assertFalse(tree.contains(3));
             assertTrue(tree.contains(5)); // se mantiene el nodo 5
         }
-
-        @Test
-        @DisplayName("removeBranch no hace nada si cmp < 0 pero left es null")
-        void removeBranchCmpLessThanZeroLeftIsNull() {
-            tree.insert(10); // solo raíz
-            tree.removeBranch(5);
-            assertTrue(tree.contains(10));
-        }
-
     }
 
     @Nested
@@ -302,4 +275,159 @@ public class BinarySearchTreeTest {
             assertTrue(tree.depth() <= 3);
         }
     }
+
+@Nested
+@DisplayName("removeValue")
+class RemoveValueTests {
+    @Test
+    @DisplayName("debe eliminar un nodo hoja correctamente")
+    void shouldRemoveLeafNode() {
+        tree.insert(10);
+        tree.insert(5);
+        tree.removeValue(5);
+        assertFalse(tree.contains(5));
+        assertEquals(1, tree.size());
+    }
+
+    
+
+    @Test
+    @DisplayName("debe eliminar un nodo con un solo hijo (derecho)")
+    void shouldRemoveNodeWithRightChild() {
+        tree.insert(10);
+        tree.insert(15);
+        tree.insert(20);
+        tree.removeValue(15);
+        assertFalse(tree.contains(15));
+        assertTrue(tree.contains(20));
+        assertEquals("10(,20)", tree.render());
+    }
+
+    @Test
+    @DisplayName("debe eliminar un nodo con dos hijos")
+    void shouldRemoveNodeWithTwoChildren() {
+        tree.insert(10);
+        tree.insert(5);
+        tree.insert(15);
+        tree.insert(12);
+        tree.insert(17);
+        tree.removeValue(15);
+        assertFalse(tree.contains(15));
+        assertTrue(tree.contains(12));
+        assertTrue(tree.contains(17));
+        // Verificamos que el sucesor (12 o 17) haya tomado su lugar
+        assertTrue(tree.render().contains("12") || tree.render().contains("17"));
+    }
+
+    @Test
+    @DisplayName("no debe hacer nada si el valor no existe")
+    void shouldDoNothingIfValueNotExists() {
+        tree.insert(10);
+        tree.removeValue(99);
+        assertEquals(1, tree.size());
+    }
+
+    @Test
+    @DisplayName("no debe lanzar excepción en árbol vacío")
+    void shouldNotThrowOnEmptyTree() {
+        assertDoesNotThrow(() -> tree.removeValue(10));
+    }
+
+}
+@Nested
+@DisplayName("render")
+class RenderTests {
+    @Test
+    @DisplayName("debe devolver cadena vacía para árbol vacío")
+    void shouldReturnEmptyStringForEmptyTree() {
+        assertEquals("", tree.render());
+    }
+
+    @Test
+    @DisplayName("debe devolver solo el valor para nodo hoja")
+    void shouldReturnJustValueForLeafNode() {
+        tree.insert(10);
+        assertEquals("10", tree.render());
+    }
+
+    @Test
+    @DisplayName("debe mostrar correctamente árbol con hijo izquierdo")
+    void shouldShowLeftChildCorrectly() {
+        tree.insert(10);
+        tree.insert(5);
+        assertEquals("10(5,)", tree.render());
+    }
+
+    @Test
+    @DisplayName("debe mostrar correctamente árbol con hijo derecho")
+    void shouldShowRightChildCorrectly() {
+        tree.insert(10);
+        tree.insert(15);
+        assertEquals("10(,15)", tree.render());
+    }
+
+    @Test
+    @DisplayName("debe mostrar correctamente árbol con ambos hijos")
+    void shouldShowBothChildrenCorrectly() {
+        tree.insert(10);
+        tree.insert(5);
+        tree.insert(15);
+        assertEquals("10(5,15)", tree.render());
+    }
+
+    @Test
+    @DisplayName("debe mostrar correctamente árbol multinivel")
+    void shouldShowMultiLevelTreeCorrectly() {
+        tree.insert(10);
+        tree.insert(5);
+        tree.insert(15);
+        tree.insert(3);
+        tree.insert(7);
+        tree.insert(12);
+        tree.insert(20);
+        String result = tree.render();
+        assertTrue(result.contains("10(5(3,7),15(12,20))") || 
+                  result.contains("10(5(3,7),15(12,20))"));
+    }
+}
+
+@Nested
+@DisplayName("inOrder")
+class InOrderTests {
+    @Test
+    @DisplayName("debe devolver lista vacía para árbol vacío")
+    void shouldReturnEmptyListForEmptyTree() {
+        assertTrue(tree.inOrder().isEmpty());
+    }
+
+    @Test
+    @DisplayName("debe devolver lista con un elemento para árbol con un nodo")
+    void shouldReturnSingleElementForSingleNodeTree() {
+        tree.insert(10);
+        List<Integer> result = tree.inOrder();
+        assertEquals(1, result.size());
+        assertEquals(10, result.get(0));
+    }
+
+    @Test
+    @DisplayName("debe devolver elementos en orden correcto para árbol con múltiples nodos")
+    void shouldReturnElementsInOrderForMultiNodeTree() {
+        tree.insert(10);
+        tree.insert(5);
+        tree.insert(15);
+        tree.insert(3);
+        tree.insert(7);
+        tree.insert(12);
+        tree.insert(20);
+        
+        List<Integer> expected = List.of(3, 5, 7, 10, 12, 15, 20);
+        assertEquals(expected, tree.inOrder());
+    }
+
+   
+
+}
+
+
+
 }

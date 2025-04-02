@@ -138,13 +138,13 @@ public class BinarySearchTree<T> implements BinarySearchTreeStructure<T> {
                 right.removeBranch(this.value);
             } else if (left != null) {
                 this.value = left.value;
+                right = left.right;  // Antes era: right = left.right;
                 left = left.left;
-                right = left.right;
             } else if (right != null) {
                 this.value = right.value;
-                left = right.left;
+                left = right.left;   // Antes faltaba esta línea
                 right = right.right;
-            } else {
+            }else {
                 this.value = null;
             }
         } else if (compare < 0 && left != null) {
@@ -167,6 +167,30 @@ public class BinarySearchTree<T> implements BinarySearchTreeStructure<T> {
 
     @Override
     public void balance() {
+        if(value==null){
+            return;
+        }
+
+        List<T> elements = this.inOrder();
+
+        this.value = null;
+        this.left = null;
+        this.right = null;
+       
+        balanceInsert(elements, 0, elements.size() - 1);
+
+
+    }
+
+    private void balanceInsert(List<T> elements, int start, int end) {
+        if (start > end){
+            return; 
+        } 
+
+        int mid = (start + end) / 2;
+        this.insert(elements.get(mid));
+        balanceInsert(elements, start, mid - 1);
+        balanceInsert(elements, mid + 1, end);
     }
     
 }

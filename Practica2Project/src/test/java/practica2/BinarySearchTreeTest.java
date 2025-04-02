@@ -75,6 +75,14 @@ public class BinarySearchTreeTest {
             tree.insert(15);
             assertFalse(tree.isLeaf());
         }
+
+        @Test
+        @DisplayName("isLeaf debe devolver true si es una hoja sin hijos")
+        void isLeafShouldReturnTrueWhenNoChildren() {
+            tree.insert(10); // solo la raíz
+            assertTrue(tree.isLeaf());
+        }
+
     }
 
     @Nested

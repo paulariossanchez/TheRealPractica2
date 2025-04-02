@@ -22,7 +22,7 @@ public class BinarySearchTree&lt;T&gt; implements BinarySearchTreeStructure&lt;T
 <span class="fc bfc" id="L22" title="All 2 branches covered.">        if (value == null) throw new BinarySearchTreeException(&quot;Cannot insert null value.&quot;);</span>
 <span class="fc bfc" id="L23" title="All 2 branches covered.">        if (this.value == null) {</span>
 <span class="fc" id="L24">            this.value = value;</span>
-<span class="fc" id="L25">        } else {</span>
+        } else {
 <span class="fc" id="L26">            int compare = comparator.compare(value, this.value);</span>
 <span class="fc bfc" id="L27" title="All 2 branches covered.">            if (compare &lt; 0) {</span>
 <span class="fc bfc" id="L28" title="All 2 branches covered.">                if (left == null) left = new BinarySearchTree&lt;&gt;(comparator);</span>
@@ -30,7 +30,7 @@ public class BinarySearchTree&lt;T&gt; implements BinarySearchTreeStructure&lt;T
 <span class="fc bfc" id="L30" title="All 2 branches covered.">            } else if (compare &gt; 0) {</span>
 <span class="fc bfc" id="L31" title="All 2 branches covered.">                if (right == null) right = new BinarySearchTree&lt;&gt;(comparator);</span>
 <span class="fc" id="L32">                right.insert(value);</span>
-<span class="fc" id="L33">            } else {</span>
+            } else {
 <span class="fc" id="L34">                throw new BinarySearchTreeException(&quot;Duplicate values are not allowed.&quot;);</span>
             }
         }
@@ -93,13 +93,13 @@ public class BinarySearchTree&lt;T&gt; implements BinarySearchTreeStructure&lt;T
 <span class="fc bfc" id="L93" title="All 4 branches covered.">        if (cmp &lt; 0 &amp;&amp; left != null) {</span>
 <span class="fc bfc" id="L94" title="All 2 branches covered.">            if (comparator.compare(value, left.value) == 0) {</span>
 <span class="fc" id="L95">                left = null;  // Elimina la rama completa</span>
-<span class="fc" id="L96">            } else {</span>
+            } else {
 <span class="fc" id="L97">                left.removeBranch(value);</span>
             }
 <span class="fc bfc" id="L99" title="All 4 branches covered.">        } else if (cmp &gt; 0 &amp;&amp; right != null) {</span>
 <span class="fc bfc" id="L100" title="All 2 branches covered.">            if (comparator.compare(value, right.value) == 0) {</span>
 <span class="fc" id="L101">                right = null;</span>
-<span class="fc" id="L102">            } else {</span>
+            } else {
 <span class="fc" id="L103">                right.removeBranch(value);</span>
             }
         }
@@ -144,7 +144,7 @@ public class BinarySearchTree&lt;T&gt; implements BinarySearchTreeStructure&lt;T
 <span class="nc" id="L144">                this.value = right.value;</span>
 <span class="nc" id="L145">                left = right.left;</span>
 <span class="nc" id="L146">                right = right.right;</span>
-<span class="nc" id="L147">            } else {</span>
+            } else {
 <span class="nc" id="L148">                this.value = null;</span>
             }
 <span class="nc bnc" id="L150" title="All 4 branches missed.">        } else if (compare &lt; 0 &amp;&amp; left != null) {</span>

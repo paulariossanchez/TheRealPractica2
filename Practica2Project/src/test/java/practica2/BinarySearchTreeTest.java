@@ -182,12 +182,12 @@ public class BinarySearchTreeTest {
         void shouldTraverseRightIfNoDirectMatch() {
             tree.insert(10);
             tree.insert(15);
-            tree.insert(20); // deeper right
+            tree.insert(20); 
 
             tree.removeBranch(20);
 
             assertFalse(tree.contains(20));
-            assertTrue(tree.contains(15)); // se mantiene el nodo 15
+            assertTrue(tree.contains(15)); 
         }
 
         @Test
@@ -195,12 +195,12 @@ public class BinarySearchTreeTest {
         void shouldTraverseLeftIfNoDirectMatch() {
             tree.insert(10);
             tree.insert(5);
-            tree.insert(3); // más profundo por la izquierda
+            tree.insert(3); 
 
             tree.removeBranch(3);
 
             assertFalse(tree.contains(3));
-            assertTrue(tree.contains(5)); // se mantiene el nodo 5
+            assertTrue(tree.contains(5)); 
         }
     }
 
@@ -221,8 +221,8 @@ public class BinarySearchTreeTest {
         @DisplayName("profundidad de árbol con hijos izquierdo y derecho")
         void depthWithLeftAndRightChildren() {
             tree.insert(10);
-            tree.insert(5);  // hijo izquierdo
-            tree.insert(15); // hijo derecho
+            tree.insert(5);  
+            tree.insert(15); 
 
             assertEquals(2, tree.depth());
         }
@@ -315,7 +315,7 @@ class RemoveValueTests {
         assertFalse(tree.contains(15));
         assertTrue(tree.contains(12));
         assertTrue(tree.contains(17));
-        // Verificamos que el sucesor (12 o 17) haya tomado su lugar
+        
         assertTrue(tree.render().contains("12") || tree.render().contains("17"));
     }
 
@@ -428,6 +428,180 @@ class InOrderTests {
 
 }
 
-
+@Nested
+@DisplayName("balanceInsert")
+class BalanceInsertTests {
+    @Test
+    @DisplayName("debe balancear el árbol después de múltiples inserciones")
+    void shouldBalanceAfterMultipleInsertions() {
+        tree.insert(10);
+        tree.insert(5);
+        tree.insert(15);
+        tree.insert(3);
+        tree.insert(7);
+        tree.insert(12);
+        tree.insert(20);
+        
+       
+        assertTrue(tree.depth() <= 3);
+    }
 
 }
+
+@Nested
+@DisplayName("balance")
+class TreeBalanceTests {
+    @Test
+    @DisplayName("debe balancear árbol desbalanceado")
+    void shouldBalanceUnbalancedTree() {
+        for (int i = 1; i <= 10; i++) {
+            tree.insert(i); 
+        }
+        
+        int originalDepth = tree.depth();
+        tree.balance();
+        
+        assertTrue(tree.depth() < originalDepth);
+        assertEquals(10, tree.size());
+        
+      
+        List<Integer> elements = tree.inOrder();
+        for (int i = 1; i < elements.size(); i++) {
+            assertTrue(elements.get(i-1) < elements.get(i));
+        }
+    }
+
+    @Test
+    @DisplayName("no debe hacer nada con árbol vacío")
+    void shouldDoNothingWithEmptyTree() {
+        assertDoesNotThrow(() -> tree.balance());
+        assertEquals(0, tree.size());
+    }
+
+    @Test
+    @DisplayName("debe mantener árbol ya balanceado")
+    void shouldKeepBalancedTree() {
+        tree.insert(10);
+        tree.insert(5);
+        tree.insert(15);
+        tree.insert(3);
+        tree.insert(7);
+        tree.insert(12);
+        tree.insert(20);
+        
+        String originalRender = tree.render();
+        tree.balance();
+        assertEquals(originalRender, tree.render());
+    }
+
+    @Test
+    @DisplayName("debe mantener todos los elementos después de balancear")
+    void shouldKeepAllElementsAfterBalancing() {
+        List<Integer> elements = List.of(8, 3, 10, 1, 6, 14, 4, 7, 13);
+        elements.forEach(tree::insert);
+        
+        tree.balance();
+        List<Integer> result = tree.inOrder();
+        
+        assertEquals(elements.size(), result.size());
+        assertTrue(result.containsAll(elements));
+    }
+}
+
+@Nested
+@DisplayName("removeValue - Casos Adicionales")
+class RemoveValueAdditionalTests {
+    @Test
+    @DisplayName("debe eliminar la raíz cuando tiene dos hijos")
+    void shouldRemoveRootWithTwoChildren() {
+        tree.insert(10);
+        tree.insert(5);
+        tree.insert(15);
+        tree.removeValue(10);
+        assertFalse(tree.contains(10));
+        assertEquals(2, tree.size());
+        
+        assertTrue(tree.render().startsWith("5") || tree.render().startsWith("15"));
+    }
+
+    @Test
+    @DisplayName("debe eliminar la raíz cuando solo tiene hijo izquierdo")
+    void shouldRemoveRootWithOnlyLeftChild() {
+        tree.insert(10);
+        tree.insert(5);
+        tree.removeValue(10);
+        assertFalse(tree.contains(10));
+        assertEquals(1, tree.size());
+        assertEquals("5", tree.render());
+    }
+
+    @Test
+    @DisplayName("debe eliminar la raíz cuando solo tiene hijo derecho")
+    void shouldRemoveRootWithOnlyRightChild() {
+        tree.insert(10);
+        tree.insert(15);
+        tree.removeValue(10);
+        assertFalse(tree.contains(10));
+        assertEquals(1, tree.size());
+        assertEquals("15", tree.render());
+    }
+
+    @Test
+    @DisplayName("debe eliminar correctamente cuando el sucesor tiene hijo derecho")
+    void shouldRemoveWhenSuccessorHasRightChild() {
+        tree.insert(10);
+        tree.insert(5);
+        tree.insert(15);
+        tree.insert(12);
+        tree.insert(17);
+        tree.insert(11);
+        tree.insert(13);
+        tree.removeValue(10);
+        assertFalse(tree.contains(10));
+        
+        assertTrue(tree.render().contains("11"));
+    }
+
+    @Test
+    @DisplayName("debe manejar correctamente árboles complejos después de eliminar")
+    void shouldHandleComplexTreesAfterRemoval() {
+       
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(70);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(60);
+        tree.insert(80);
+        tree.insert(10);
+        tree.insert(25);
+        tree.insert(35);
+        tree.insert(45);
+        tree.insert(55);
+        tree.insert(65);
+        tree.insert(75);
+        tree.insert(85);
+        
+        int originalSize = tree.size();
+        tree.removeValue(30); 
+        
+        assertFalse(tree.contains(30));
+        assertEquals(originalSize - 1, tree.size());
+        
+        List<Integer> inOrder = tree.inOrder();
+        for (int i = 1; i < inOrder.size(); i++) {
+            assertTrue(inOrder.get(i - 1) < inOrder.get(i));
+        }
+    }
+}
+
+}
+
+
+
+
+
+
+
+
+

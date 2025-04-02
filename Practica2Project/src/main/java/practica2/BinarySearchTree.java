@@ -135,16 +135,16 @@ public class BinarySearchTree<T> implements BinarySearchTreeStructure<T> {
         if (compare == 0) {
             if (left != null && right != null) {
                 this.value = right.minimum();
-                right.removeBranch(this.value);
+                right.removeValue(this.value);  // Cambiado de removeBranch a removeValue
             } else if (left != null) {
                 this.value = left.value;
-                right = left.right;  // Antes era: right = left.right;
+                right = left.right;  // Antes faltaba esta línea
                 left = left.left;
             } else if (right != null) {
                 this.value = right.value;
                 left = right.left;   // Antes faltaba esta línea
                 right = right.right;
-            }else {
+            } else {
                 this.value = null;
             }
         } else if (compare < 0 && left != null) {
